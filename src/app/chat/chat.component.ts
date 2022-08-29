@@ -34,10 +34,6 @@ export class ChatComponent implements OnInit {
     this.chatService.getRooms().subscribe((data: Rooms[]) => {
       this.rooms = data;
     });
-
-    // this.activatedRoute.queryParams.subscribe((params: any) => {
-    //   this.username = params.name;
-    // });
   }
 
   saveRoom() {
@@ -56,7 +52,10 @@ export class ChatComponent implements OnInit {
   saveMessage() {
     const user = localStorage.getItem('user') ?? '';
     const username = JSON.parse(user).username;
-    const message = new Message(username, this.content);
+    const userid = localStorage.getItem('user') ?? '';
+    const userId = JSON.parse(userid).id;
+
+    const message = new Message(username, this.content, userId);
     console.log(message);
 
     this.chatService.sendMessage(message).subscribe((data: any) => {
