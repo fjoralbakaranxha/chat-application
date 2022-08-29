@@ -54,7 +54,10 @@ export class ChatComponent implements OnInit {
     const username = JSON.parse(user).username;
     const userid = localStorage.getItem('user') ?? '';
     const userId = JSON.parse(userid).id;
-
+    if (!this.content) {
+      alert('Please fill the content');
+      return;
+    }
     const message = new Message(username, this.content, userId);
     console.log(message);
 
