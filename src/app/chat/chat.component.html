@@ -25,9 +25,9 @@
 
                     </div>
                     <ul class="list-unstyled chat-list mt-2 mb-0">
-                        <li class="clearfix" *ngFor="let room of rooms">
+                        <li class="clearfix" *ngFor="let room of rooms" (click)="roomClick(room.id)">
                             <div class="about">
-                                <div class="name">{{room.roomName}}</div>
+                                <div class="name"> {{room.roomName}} </div>
                             </div>
                         </li>
                     </ul>
@@ -36,11 +36,9 @@
                     <div class="chat-header clearfix">
                         <div class="row">
                             <div class="col-lg-6">
-                                <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-                                </a>
                                 <div class="chat-about">
                                     <h6 class="m-b-0">
-                                        <p>Room 2</p>
+                                        <p>{{roomValue}}</p>
                                     </h6>
                                 </div>
                             </div>

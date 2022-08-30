@@ -3,13 +3,16 @@ export class Message {
   id!: string;
   username!: string;
   content!: string;
+  currentRoomId!: string;
 
   constructor(
     username?: string,
     content?: string,
     userId?: string,
+    currentRoomId?: string,
     id?: string
   ) {
+    if (currentRoomId) this.currentRoomId = currentRoomId;
     if (userId) this.userId = userId;
     if (id) this.id = id;
     if (username) this.username = username;

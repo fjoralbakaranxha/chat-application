@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { ChatService } from '../chat.service';
 import { Message } from '../Message';
 import { Rooms } from '../Rooms';
@@ -18,21 +17,16 @@ export class ChatComponent implements OnInit {
   rooms: any;
   username: any;
   content: string = '';
+  currentRoomId: string = '';
+  roomValue: any;
 
-  constructor(
-    private chatService: ChatService,
-    private activatedRoute: ActivatedRoute
-  ) {}
+  constructor(private chatService: ChatService) {}
 
   ngOnInit(): void {
-    this.chatService.getMessage().subscribe((data: Message[]) => {
-      this.messages = data.map(
-        (d) => new Message(d.username, d.content, d.userId, d.id)
-      );
-    });
-
     this.chatService.getRooms().subscribe((data: Rooms[]) => {
-      this.rooms = data;
+      this.rooms = data.map(
+        (d: any) => new Rooms(d.roomName, d.id, d.messages)
+      );
     });
   }
 
@@ -46,23 +40,49 @@ export class ChatComponent implements OnInit {
 
     this.chatService.addRoom(rooms).subscribe((response: any) => {
       this.rooms.push(response);
+      this.addRoomForm.value.roomName = '';
+    });
+  }
+
+  roomClick(id: string) {
+    this.currentRoomId = id;
+    this.chatService.getRoom(id).subscribe((response: Rooms) => {
+      const msg = response.messages ?? [];
+      this.roomValue = response.roomName;
+      this.messages = msg.map(
+        (d: any) => new Message(d.username, d.content, d.userId, d.id)
+      );
     });
   }
 
   saveMessage() {
     const user = localStorage.getItem('user') ?? '';
-    const username = JSON.parse(user).username;
-    const userid = localStorage.getItem('user') ?? '';
-    const userId = JSON.parse(userid).id;
+    const parsedUser = JSON.parse(user);
+    const username = parsedUser.username;
+    const userId = parsedUser.id;
+
     if (!this.content) {
       alert('Please fill the content');
       return;
     }
-    const message = new Message(username, this.content, userId);
+    const message = new Message(
+      username,
+      this.content,
+      userId,
+      this.currentRoomId
+    );
     console.log(message);
 
     this.chatService.sendMessage(message).subscribe((data: any) => {
-      this.messages.push(data);
+      const newMessage = new Message(
+        data.username,
+        data.content,
+        data.userId,
+        data.currentRoomId,
+        data.id
+      );
+      this.content = '';
+      this.messages.push(newMessage);
     });
   }
 }

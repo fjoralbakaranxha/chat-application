@@ -31,6 +31,10 @@ export class ChatService {
     return this.httpclient.get<Rooms[]>(this.urls);
   }
 
+  getRoom(id: string): Observable<Rooms> {
+    return this.httpclient.get<Rooms>(this.urls + `/${id}`);
+  }
+
   sendMessage(message: Message): Observable<any> {
     const body = JSON.stringify(message);
     return this.httpclient.post<Message>(this.url, body, {
