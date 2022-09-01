@@ -51,7 +51,10 @@
                                     <b>
                                         <ul>{{msg.username}}</ul>
                                     </b>
-                                    <ul>{{msg.content}}</ul>
+                                    <ul [contentEditable]="editable"> <button mat-mini-fab color="primary"
+                                            (click)="editMessage()">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>{{msg.content}} </ul>
                                 </div>
                                 <div class="message my-message" *ngIf="!msg.isMessageMine()">
                                     <b>
@@ -64,8 +67,13 @@
                     </div>
                     <div class="chat-message clearfix">
                         <div class="input-group mb-0">
-                            <input type="text" class="form-control" placeholder="Enter text here..."
+                            <input type="text" class="form-control" placeholder="Enter text here... "
                                 [(ngModel)]="content">
+                            <label for="firstimg">
+                                <mat-icon>attachment</mat-icon>
+                            </label>
+                            <input type="file" id="firstimg" class="attach-img" accept="image/png, image/jpeg">
+
                             <div class="input-group-prepend">
                                 <button mat-button color="primary" type="submit"
                                     style=" margin-left: 10px; margin-right: 10px; background-color:rgb(76, 185, 248); "

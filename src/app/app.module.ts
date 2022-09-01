@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -29,6 +30,7 @@ import { ChatComponent } from './chat/chat.component';
     HttpClientModule,
     BrowserAnimationsModule,
     MatDialogModule,
+    MatIconModule,
     RouterModule.forRoot([
       { path: 'login', component: LoginComponent },
       { path: '', redirectTo: 'login', pathMatch: 'full' },

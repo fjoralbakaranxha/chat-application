@@ -3,6 +3,8 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { ChatService } from '../chat.service';
 import { Message } from '../Message';
 import { Rooms } from '../Rooms';
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
 
 @Component({
   selector: 'app-chat',
@@ -19,6 +21,8 @@ export class ChatComponent implements OnInit {
   content: string = '';
   currentRoomId: string = '';
   roomValue: any;
+  editable = false;
+  private stompClient!: any;
 
   constructor(private chatService: ChatService) {}
 
@@ -28,6 +32,24 @@ export class ChatComponent implements OnInit {
         (d: any) => new Rooms(d.roomName, d.id, d.messages)
       );
     });
+    this.connect();
+  }
+
+  connect() {
+    const socket = new SockJS('http://localhost:8080/chatapp');
+    this.stompClient = Stomp.over(socket);
+
+    this.stompClient.connect({}, () => {
+      this.stompClient.subscribe('/start/chat', (messageSent: any) => {
+        this.roomClick(JSON.parse(messageSent.body));
+      });
+    });
+  }
+
+  sendMessage() {
+    //send(destination, header={}, body = " ")
+    // console.log(JSON.stringify(this.messages));
+    this.stompClient.send('/app/chat', {}, JSON.stringify(this.messages));
   }
 
   saveRoom() {
@@ -53,6 +75,10 @@ export class ChatComponent implements OnInit {
         (d: any) => new Message(d.username, d.content, d.userId, d.id)
       );
     });
+  }
+
+  editMessage() {
+    this.editable = !this.editable;
   }
 
   saveMessage() {
