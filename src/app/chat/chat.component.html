@@ -1,5 +1,3 @@
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-
 <div class="container">
     <div class="row clearfix">
         <div class="col-lg-12">
@@ -72,13 +70,122 @@
                             <label for="firstimg">
                                 <mat-icon>attachment</mat-icon>
                             </label>
-                            <input type="file" id="firstimg" class="attach-img" accept="image/png, image/jpeg">
-
+                            <input type="file" id="firstimg" class="attach-img" name="" accept="image/png, image/jpeg"
+                                (change)="onFileSelected($event)">
+                            <div class="file-list" *ngFor="let file of files; let i=index">
+                                {{file.name}}
+                            </div>
                             <div class="input-group-prepend">
                                 <button mat-button color="primary" type="submit"
                                     style=" margin-left: 10px; margin-right: 10px; background-color:rgb(76, 185, 248); "
                                     (click)="saveMessage()">Send</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="container-fluid h-50">
+    <div class="row justify-content-center h-100">
+        <div class="col-md-4 col-xl-3 chat">
+            <div class="card mb-sm-3 mb-md-0 contacts_card">
+                <div class="card-header">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="form-fld">
+                                <form [formGroup]="addRoomForm" class="field-outline">
+                                    <mat-form-field appearance="fill">
+                                        <input matInput placeholder="Enter Room Name" formControlName="roomName" />
+                                    </mat-form-field>
+                                    <div class="buttton" style=" padding-left: 100px; margin-bottom: 10px; ">
+                                        <button mat-raised-button type="submit"
+                                            style="background-color: rgb(167, 233, 150);" (click)="saveRoom()">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                                    </div>
+                                    <div class="list-room"><b><span>LIST OF ROOMS</span></b></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body contacts_body">
+                    <ul class="contacts">
+                        <li class="active" *ngFor="let room of rooms" (click)="roomClick(room.id)">
+                            <div class="d-flex bd-highlight">
+                                <div class="user_info">
+                                    <div class="name"> {{room.roomName}} </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer"></div>
+            </div>
+        </div>
+        <div class="col-md-8 col-xl-6 chat">
+            <div class="card">
+                <div class="card-header msg_head">
+                    <div class="d-flex bd-highlight">
+                        <div class="user_info">
+                            <span><b>{{roomValue}}</b></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body msg_card_body">
+                    <div *ngFor="let msg of messages">
+                        <div class="d-flex justify-content-start mb-4" *ngIf="!msg.isMessageMine()">
+                            <div class="other-message">
+                                <div class="username-l">
+                                    <b> {{msg.username}} </b>
+                                </div>
+                                {{msg.content}}
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mb-4" *ngIf="msg.isMessageMine()">
+                            <div class="my-message">
+                                <div class="username">
+                                    <b> {{msg.username}} </b>
+                                </div>
+                                <div [contentEditable]="editable"> {{msg.content}}
+
+                                    <button class="btn" mat-mini-fab color="primary" (click)="editMessage()">
+                                        <mat-icon inline="">edit</mat-icon>
+                                    </button>
+
+                                </div>
+                                <div class="button">
+                                    <button class="btn-b" aria-label="cancel" mat-mini-fab color="primary"
+                                        *ngIf="editable" (click)="cancelEdit()">
+                                        <mat-icon>cancel</mat-icon>
+                                    </button>
+
+                                    <button class="btn-b" aria-label="send" mat-mini-fab color="primary"
+                                        *ngIf="editable" (click)="saveEdit()" [disabled]="saveEditMsg">✔</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="input-group mb-0">
+                        <input type="text" class="form-control" placeholder="Enter text here... " [(ngModel)]="content">
+                        <label for="firstimg">
+                            <mat-icon>attachment</mat-icon>
+                        </label>
+                        <input type="file" id="firstimg" class="attach-img" name="" accept="image/png, image/jpeg"
+                            (change)="onFileSelected($event)">
+                        <div class="file-list" *ngFor="let file of files; let i=index">
+                            {{file.name}}
+                        </div>
+                        <div class="input-group-prepend">
+                            <button mat-button color="primary" type="submit"
+                                style=" margin-left: 10px; margin-right: 10px; background-color:rgb(76, 185, 248); "
+                                (click)="saveMessage()">Send</button>
                         </div>
                     </div>
                 </div>

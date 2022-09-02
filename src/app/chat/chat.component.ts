@@ -5,6 +5,7 @@ import { Message } from '../Message';
 import { Rooms } from '../Rooms';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -22,7 +23,10 @@ export class ChatComponent implements OnInit {
   currentRoomId: string = '';
   roomValue: any;
   editable = false;
-  private stompClient!: any;
+  // private stompClient!: any;
+  files: any[] = [];
+  cancelEditMsg: boolean = false;
+  saveEditMsg: boolean = false;
 
   constructor(private chatService: ChatService) {}
 
@@ -32,25 +36,27 @@ export class ChatComponent implements OnInit {
         (d: any) => new Rooms(d.roomName, d.id, d.messages)
       );
     });
-    this.connect();
+    // this.connect();
+    this.cancelEditMsg = true;
+    this.saveEditMsg = true;
   }
 
-  connect() {
-    const socket = new SockJS('http://localhost:8080/chatapp');
-    this.stompClient = Stomp.over(socket);
+  // connect() {
+  //   const socket = new SockJS('http://localhost:8080/chatapp');
+  //   this.stompClient = Stomp.over(socket);
 
-    this.stompClient.connect({}, () => {
-      this.stompClient.subscribe('/start/chat', (messageSent: any) => {
-        this.roomClick(JSON.parse(messageSent.body));
-      });
-    });
-  }
+  //   this.stompClient.connect({}, () => {
+  //     this.stompClient.subscribe('/start/chat', (messageSent: any) => {
+  //       this.roomClick(JSON.parse(messageSent.body));
+  //     });
+  //   });
+  // }
 
-  sendMessage() {
-    //send(destination, header={}, body = " ")
-    // console.log(JSON.stringify(this.messages));
-    this.stompClient.send('/app/chat', {}, JSON.stringify(this.messages));
-  }
+  // sendMessage() {
+  //   //send(destination, header={}, body = " ")
+  //   // console.log(JSON.stringify(this.messages));
+  //   this.stompClient.send('/app/chat', {}, JSON.stringify(this.messages));
+  // }
 
   saveRoom() {
     let roomName = this.addRoomForm.value.roomName;
@@ -79,6 +85,8 @@ export class ChatComponent implements OnInit {
 
   editMessage() {
     this.editable = !this.editable;
+    this.cancelEditMsg = !this.cancelEditMsg;
+    this.saveEditMsg = !this.saveEditMsg;
   }
 
   saveMessage() {
@@ -111,4 +119,20 @@ export class ChatComponent implements OnInit {
       this.messages.push(newMessage);
     });
   }
+
+  onFileSelected(event: any) {
+    // Iterate over selected files
+    for (let file of event.target.files) {
+      // Append to a list
+      this.files.push({
+        name: file.name,
+        type: file.type,
+        // Other specs
+      });
+    }
+  }
+
+  cancelEdit() {}
+
+  saveEdit() {}
 }

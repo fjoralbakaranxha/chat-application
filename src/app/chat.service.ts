@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Message } from './Message';
@@ -54,4 +54,21 @@ export class ChatService {
       },
     });
   }
+
+  // uploadImage(file: File): Observable<HttpEvent<any>> {
+  //   const formData: FormData = new FormData();
+
+  //   formData.append('file', file);
+
+  //   const req = new HttpRequest('POST', `${this.baseUrl}/upload`, formData, {
+
+  //     responseType: 'json'
+  //   });
+
+  //   return this.httpclient.request(req);
+  // }
+
+  // getFiles(): Observable<any> {
+  //   return this.httpclient.get(`${this.baseUrl}/files`);
+  // }
 }
