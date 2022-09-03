@@ -212,20 +212,6 @@
   text-align: start;
 }
 
-.button {
-  justify-content: end;
-
-}
-
-
-.btn {
-  padding: 0rem;
-  width: max-content;
-  margin-right: 5px;
-  background-color: #78e08f;
-
-}
-
 
 
 .btn-b {
@@ -234,4 +220,17 @@
   margin-right: 5px;
   background-color: #78e08f;
   justify-content: end;
+}
+
+.button {
+  justify-content: end;
+
+}
+
+.btn {
+  padding: 0rem;
+  width: max-content;
+  margin-right: 5px;
+  background-color: #78e08f;
+
 }

@@ -27,6 +27,8 @@ export class ChatComponent implements OnInit {
   files: any[] = [];
   cancelEditMsg: boolean = false;
   saveEditMsg: boolean = false;
+  showButton: boolean = false;
+  isShown = true;
 
   constructor(private chatService: ChatService) {}
 
@@ -73,6 +75,7 @@ export class ChatComponent implements OnInit {
   }
 
   roomClick(id: string) {
+    this.isShown = !this.isShown;
     this.currentRoomId = id;
     this.chatService.getRoom(id).subscribe((response: Rooms) => {
       const msg = response.messages ?? [];
