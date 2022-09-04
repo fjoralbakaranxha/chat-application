@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="col-md-8 col-xl-6 chat">
-            <div class="card" [hidden]="isShown">
+            <div class="card" *ngIf="currentRoomId">
                 <div class="card-header msg_head">
                     <div class="d-flex bd-highlight">
                         <div class="user_info">
@@ -52,7 +52,13 @@
                                 <div class="username-l">
                                     <b> {{msg.username}} </b>
                                 </div>
-                                {{msg.content}}
+
+                                <div *ngIf="msg.isImage()">
+                                    <img style="max-width:300px;max-height:400px;" src="{{msg.content}}" />
+                                </div>
+                                <div *ngIf="!msg.isImage()">
+                                    {{msg.content}}
+                                </div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end mb-4" *ngIf="msg.isMessageMine()">
@@ -60,10 +66,14 @@
                                 <div class="username">
                                     <b> {{msg.username}} </b>
                                 </div>
-                                <div class="txt" [contentEditable]="editable" (mouseover)="showButton = true"
-                                    (mouseleave)="showButton = false"> {{msg.content}}
-                                    <button class="btn" mat-mini-fab color="primary" *ngIf="showButton"
-                                        (click)="editMessage()">
+                                <div class="txt" [contentEditable]="editable">
+                                    <div *ngIf="msg.isImage()">
+                                        <img style="max-width:300px;max-height:400px;" src="{{msg.content}}" />
+                                    </div>
+                                    <div *ngIf="!msg.isImage()">
+                                        {{msg.content}}
+                                    </div>
+                                    <button class="btn" mat-mini-fab color="primary" (click)="editMessage()">
                                         <mat-icon inline="">edit</mat-icon>
                                     </button>
                                 </div>
@@ -74,7 +84,7 @@
                                     </button>
 
                                     <button class="btn-b" aria-label="send" mat-mini-fab color="primary"
-                                        *ngIf="editable" (click)="saveEdit()" [disabled]="saveEditMsg">✔</button>
+                                        *ngIf="editable" (click)="saveEdit(msg)">✔</button>
                                 </div>
 
                             </div>
@@ -95,7 +105,7 @@
                         <div class="input-group-prepend">
                             <button mat-button color="primary" type="submit"
                                 style=" margin-left: 10px; margin-right: 10px; background-color:rgb(76, 185, 248); "
-                                (click)="saveMessage()">Send</button>
+                                (click)="sendMessage()">Send</button>
                         </div>
                     </div>
                 </div>

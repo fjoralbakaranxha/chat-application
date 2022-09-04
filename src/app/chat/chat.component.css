@@ -12,6 +12,7 @@
   height: 600px;
   border-radius: 15px !important;
   background-color: rgba(231, 225, 225, 0.945) !important;
+
 }
 
 .contacts_body {
@@ -101,6 +102,7 @@
 
 
 .other-message {
+
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 10px;
@@ -111,6 +113,7 @@
 }
 
 .my-message {
+
   margin-top: auto;
   margin-bottom: auto;
   margin-right: 10px;
@@ -165,6 +168,7 @@
 ::-webkit-scrollbar-thumb {
   background: #7F7FD5;
   border-radius: 10px;
+
 }
 
 /* Handle on hover */

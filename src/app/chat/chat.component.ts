@@ -23,12 +23,12 @@ export class ChatComponent implements OnInit {
   currentRoomId: string = '';
   roomValue: any;
   editable = false;
-  // private stompClient!: any;
+  stompClient!: any;
+  imageSelected!: any;
   files: any[] = [];
   cancelEditMsg: boolean = false;
   saveEditMsg: boolean = false;
   showButton: boolean = false;
-  isShown = true;
 
   constructor(private chatService: ChatService) {}
 
@@ -38,27 +38,58 @@ export class ChatComponent implements OnInit {
         (d: any) => new Rooms(d.roomName, d.id, d.messages)
       );
     });
-    // this.connect();
+    this.connect();
     this.cancelEditMsg = true;
     this.saveEditMsg = true;
   }
 
-  // connect() {
-  //   const socket = new SockJS('http://localhost:8080/chatapp');
-  //   this.stompClient = Stomp.over(socket);
+  connect() {
+    const socket = new SockJS('http://localhost:8080/chatapp');
+    this.stompClient = Stomp.over(socket);
 
-  //   this.stompClient.connect({}, () => {
-  //     this.stompClient.subscribe('/start/chat', (messageSent: any) => {
-  //       this.roomClick(JSON.parse(messageSent.body));
-  //     });
-  //   });
-  // }
+    this.stompClient.connect({}, () => {
+      this.stompClient.subscribe('/topic/public', (messageSent: any) => {
+        const data = JSON.parse(messageSent.body);
+        if (data.currentRoomId === this.currentRoomId) {
+          const newMessage = new Message(
+            data.username,
+            data.content,
+            data.userId,
+            data.currentRoomId,
+            data.type,
+            data.id
+          );
+          this.messages.push(newMessage);
+        }
+      });
+    });
+  }
 
-  // sendMessage() {
-  //   //send(destination, header={}, body = " ")
-  //   // console.log(JSON.stringify(this.messages));
-  //   this.stompClient.send('/app/chat', {}, JSON.stringify(this.messages));
-  // }
+  sendMessage() {
+    const user = localStorage.getItem('user') ?? '';
+    const parsedUser = JSON.parse(user);
+    const username = parsedUser.username;
+    const userId = parsedUser.id;
+
+    if (!this.content) {
+      alert('Please fill the content');
+      return;
+    }
+    const type = this.imageSelected ? 'image' : 'message';
+    const messageContent = this.imageSelected ?? this.content;
+
+    const message = new Message(
+      username,
+      messageContent,
+      userId,
+      this.currentRoomId,
+      type
+    );
+
+    this.stompClient.send('/app/chat.sendMessage', {}, JSON.stringify(message));
+    this.content = '';
+    this.imageSelected = null;
+  }
 
   saveRoom() {
     let roomName = this.addRoomForm.value.roomName;
@@ -75,13 +106,20 @@ export class ChatComponent implements OnInit {
   }
 
   roomClick(id: string) {
-    this.isShown = !this.isShown;
     this.currentRoomId = id;
     this.chatService.getRoom(id).subscribe((response: Rooms) => {
       const msg = response.messages ?? [];
       this.roomValue = response.roomName;
       this.messages = msg.map(
-        (d: any) => new Message(d.username, d.content, d.userId, d.id)
+        (d: any) =>
+          new Message(
+            d.username,
+            d.content,
+            d.userId,
+            d.currentRoomId,
+            d.type,
+            d.id
+          )
       );
     });
   }
@@ -124,18 +162,21 @@ export class ChatComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
-    // Iterate over selected files
-    for (let file of event.target.files) {
-      // Append to a list
-      this.files.push({
-        name: file.name,
-        type: file.type,
-        // Other specs
-      });
-    }
+    const file = event.target.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    //convert file to base64 string
+    //kete string e ruaj tek imageSelected
+    reader.onload = () => {
+      this.content = file.name;
+      this.imageSelected = reader.result;
+    };
   }
 
   cancelEdit() {}
 
-  saveEdit() {}
+  saveEdit(msg: Message) {
+    console.log(msg);
+  }
 }
