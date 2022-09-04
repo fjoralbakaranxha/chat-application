@@ -5,6 +5,7 @@ export class Message {
   content!: string;
   currentRoomId!: string;
   type!: string; //message-image
+  newValue!: string;
 
   constructor(
     username?: string,

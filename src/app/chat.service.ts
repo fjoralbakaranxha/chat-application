@@ -1,4 +1,4 @@
-import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Message } from './Message';
@@ -37,15 +37,15 @@ export class ChatService {
     return this.httpclient.get<Rooms>(this.urls + `/${id}`);
   }
 
-  editMessage(message: Message): Observable<any> {
-    const body = JSON.stringify(message);
-    return this.httpclient.put(this.url + `/${message.id}`, body, {
-      responseType: 'text',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  }
+  // editMessage(message: Message): Observable<any> {
+  //   const body = JSON.stringify(message);
+  //   return this.httpclient.put(this.url + `/${message.id}`, body, {
+  //     responseType: 'text',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   });
+  // }
   sendMessage(message: Message): Observable<any> {
     const body = JSON.stringify(message);
     return this.httpclient.post<Message>(this.url, body, {
@@ -54,21 +54,4 @@ export class ChatService {
       },
     });
   }
-
-  // uploadImage(file: File): Observable<HttpEvent<any>> {
-  //   const formData: FormData = new FormData();
-
-  //   formData.append('file', file);
-
-  //   const req = new HttpRequest('POST', `${this.baseUrl}/upload`, formData, {
-
-  //     responseType: 'json'
-  //   });
-
-  //   return this.httpclient.request(req);
-  // }
-
-  // getFiles(): Observable<any> {
-  //   return this.httpclient.get(`${this.baseUrl}/files`);
-  // }
 }

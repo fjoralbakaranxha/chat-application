@@ -5,7 +5,6 @@ import { Message } from '../Message';
 import { Rooms } from '../Rooms';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -27,8 +26,8 @@ export class ChatComponent implements OnInit {
   imageSelected!: any;
   files: any[] = [];
   cancelEditMsg: boolean = false;
-  saveEditMsg: boolean = false;
-  showButton: boolean = false;
+  saveEditMsg: boolean = true;
+  showButton: boolean = true;
 
   constructor(private chatService: ChatService) {}
 
@@ -41,6 +40,18 @@ export class ChatComponent implements OnInit {
     this.connect();
     this.cancelEditMsg = true;
     this.saveEditMsg = true;
+  }
+
+  onInputChange(msg: Message, val: any) {
+    // msg.newValue = val.currentTarget.value;
+    const index = this.messages.findIndex((m: Message) => {
+      if (m.id === msg.id) {
+        return true;
+      }
+
+      return false;
+    });
+    this.messages[index].newValue = val.currentTarget.value;
   }
 
   connect() {
@@ -59,10 +70,26 @@ export class ChatComponent implements OnInit {
             data.type,
             data.id
           );
-          this.messages.push(newMessage);
+          this.addMessage(newMessage);
         }
       });
     });
+  }
+
+  addMessage(message: Message) {
+    //Check if message is there
+    const index = this.messages.findIndex((m: Message) => {
+      if (m.id === message.id) {
+        return true;
+      }
+
+      return false;
+    });
+    if (index == -1) {
+      this.messages.push(message);
+    } else {
+      this.messages[index] = message;
+    }
   }
 
   sendMessage() {
@@ -176,7 +203,8 @@ export class ChatComponent implements OnInit {
 
   cancelEdit() {}
 
-  saveEdit(msg: Message) {
-    console.log(msg);
+  saveEdit(message: Message) {
+    message.content = message.newValue;
+    this.stompClient.send('/app/chat.editMessage', {}, JSON.stringify(message));
   }
 }
