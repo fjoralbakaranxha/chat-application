@@ -1,0 +1,13 @@
+.input-content {
+  background-color: #78e08f;
+  border: none;
+  text-align: end;
+}
+
+.btn-b {
+  padding: 0rem;
+  width: max-content;
+  margin-right: 5px;
+  background-color: #78e08f;
+  justify-content: end;
+}

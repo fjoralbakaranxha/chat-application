@@ -17,9 +17,10 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { ChatComponent } from './chat/chat.component';
+import { ChatMsgComponent } from './chat/chat-msg/chat-msg.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, ChatComponent],
+  declarations: [AppComponent, LoginComponent, ChatComponent, ChatMsgComponent],
   imports: [
     BrowserModule,
     FormsModule,

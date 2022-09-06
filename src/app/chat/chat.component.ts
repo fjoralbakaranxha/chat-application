@@ -27,7 +27,6 @@ export class ChatComponent implements OnInit {
   files: any[] = [];
   cancelEditMsg: boolean = false;
   saveEditMsg: boolean = true;
-  showButton: boolean = true;
 
   constructor(private chatService: ChatService) {}
 
@@ -38,8 +37,6 @@ export class ChatComponent implements OnInit {
       );
     });
     this.connect();
-    this.cancelEditMsg = true;
-    this.saveEditMsg = true;
   }
 
   onInputChange(msg: Message, val: any) {
@@ -77,7 +74,7 @@ export class ChatComponent implements OnInit {
   }
 
   addMessage(message: Message) {
-    //Check if message is there
+    //Kontrolloj nese ekziston mesazhi
     const index = this.messages.findIndex((m: Message) => {
       if (m.id === message.id) {
         return true;
@@ -128,7 +125,7 @@ export class ChatComponent implements OnInit {
 
     this.chatService.addRoom(rooms).subscribe((response: any) => {
       this.rooms.push(response);
-      this.addRoomForm.value.roomName = '';
+      this.addRoomForm.reset();
     });
   }
 
@@ -149,12 +146,18 @@ export class ChatComponent implements OnInit {
           )
       );
     });
+    this.scrollOnBottom();
   }
 
-  editMessage() {
-    this.editable = !this.editable;
-    this.cancelEditMsg = !this.cancelEditMsg;
-    this.saveEditMsg = !this.saveEditMsg;
+  scrollOnBottom(): void {
+    setTimeout(() => {
+      const element = document.getElementById('chat-container-id');
+      // console.log(element);
+
+      if (element) {
+        element.scrollTo({ top: element.scrollHeight, behavior: 'smooth' });
+      }
+    }, 200);
   }
 
   saveMessage() {
@@ -173,7 +176,7 @@ export class ChatComponent implements OnInit {
       userId,
       this.currentRoomId
     );
-    console.log(message);
+    // console.log(message);
 
     this.chatService.sendMessage(message).subscribe((data: any) => {
       const newMessage = new Message(
@@ -204,6 +207,11 @@ export class ChatComponent implements OnInit {
   cancelEdit() {}
 
   saveEdit(message: Message) {
+    // console.log(message);
+
+    if (message.newValue == null) {
+      return;
+    }
     message.content = message.newValue;
     this.stompClient.send('/app/chat.editMessage', {}, JSON.stringify(message));
   }

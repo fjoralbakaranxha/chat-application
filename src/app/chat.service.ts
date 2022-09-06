@@ -4,8 +4,6 @@ import { Observable } from 'rxjs';
 import { Message } from './Message';
 import { Rooms } from './Rooms';
 
-import * as SockJS from 'sockjs-client';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -37,15 +35,6 @@ export class ChatService {
     return this.httpclient.get<Rooms>(this.urls + `/${id}`);
   }
 
-  // editMessage(message: Message): Observable<any> {
-  //   const body = JSON.stringify(message);
-  //   return this.httpclient.put(this.url + `/${message.id}`, body, {
-  //     responseType: 'text',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   });
-  // }
   sendMessage(message: Message): Observable<any> {
     const body = JSON.stringify(message);
     return this.httpclient.post<Message>(this.url, body, {
