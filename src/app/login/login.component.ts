@@ -12,6 +12,7 @@ export class LoginComponent implements OnInit {
   data: any;
   form: FormGroup = new FormGroup({
     username: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
   });
 
   constructor(private router: Router) {}
@@ -21,7 +22,11 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.d = new Date().getTime().toString();
-    this.data = { id: this.d, username: this.form.value.username };
+    this.data = {
+      id: this.d,
+      username: this.form.value.username,
+      password: this.form.value.password,
+    };
     localStorage.setItem('user', JSON.stringify(this.data));
     console.log(this.data);
 

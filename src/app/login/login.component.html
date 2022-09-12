@@ -5,7 +5,9 @@
             <div class="input-field">
                 <input matInput type="text" placeholder="Username" formControlName="username" />
             </div>
-
+            <div class="input-field">
+                <input type="password" placeholder="Password" autocomplete="new-password" formControlName="password">
+            </div>
         </div>
         <div class="action">
             <button mat-button color="primary" [routerLink]="['/chats']" (click)="onSubmit()">
