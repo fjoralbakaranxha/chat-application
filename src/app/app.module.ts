@@ -19,9 +19,18 @@ import { LoginComponent } from './login/login.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChatMsgComponent } from './chat/chat-msg/chat-msg.component';
 import { RegisterComponent } from './register/register.component';
+import { httpInterceptorProviders } from './helpers/auth.interceptor';
+import { FjoriComponent } from './fjori/fjori.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, ChatComponent, ChatMsgComponent, RegisterComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    ChatComponent,
+    ChatMsgComponent,
+    RegisterComponent,
+    FjoriComponent,
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -35,15 +44,12 @@ import { RegisterComponent } from './register/register.component';
     MatDialogModule,
     MatIconModule,
     MatButtonToggleModule,
-    RouterModule.forRoot([
-      { path: 'login', component: LoginComponent },
-      { path: '', redirectTo: 'login', pathMatch: 'full' },
-    ]),
-    RouterModule.forChild([{ path: 'chats', component: ChatComponent }]),
+
+    RouterModule.forRoot([]),
     CommonModule,
   ],
 
-  providers: [],
+  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

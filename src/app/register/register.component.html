@@ -1,1 +1,16 @@
-<p>register works!</p>
+<div class="auth-wrapper">
+    <form class="form-signin" [formGroup]="registerForm" (ngSubmit)="registerUser()">
+        <h3 class="h3 mb-3 font-weight-normal text-center">Please sign up</h3>
+        <div class="input-field">
+            <input type="text" class="form-control" formControlName="name" placeholder="Enter name" required />
+        </div>
+        <div class="input-field">
+            <input type="password" class="form-control" formControlName="password" placeholder="Password" required />
+        </div>
+        <div class="action">
+            <button mat-button color="primary">
+                Sign Up
+            </button>
+        </div>
+    </form>
+</div>

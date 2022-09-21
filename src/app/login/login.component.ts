@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -10,33 +11,41 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   d: any;
   data: any;
-  form: FormGroup = new FormGroup({
-    username: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
-  });
-
-  constructor(private router: Router) {}
+  form!: FormGroup;
+  constructor(
+    public fb: FormBuilder,
+    public authService: AuthService,
+    public router: Router
+  ) {
+    this.form = this.fb.group({
+      email: [''],
+      password: [''],
+    });
+  }
 
   onSubmit() {
     if (!this.form.valid) {
       return;
     }
-    this.d = new Date().getTime().toString();
-    this.data = {
-      id: this.d,
-      username: this.form.value.username,
-      password: this.form.value.password,
-    };
-    localStorage.setItem('user', JSON.stringify(this.data));
-    console.log(this.data);
 
-    {
-    }
+    this.authService.login(this.form.value);
   }
 
-  ngOnInit() {
-    if (localStorage.getItem('user') !== null) {
-      this.router.navigate(['/chats'], {});
-    }
-  }
+  // onSubmit() {
+  //   if (!this.form.valid) {
+  //     return;
+  //   }
+  //   this.d = new Date().getTime().toString();
+  //   this.data = {
+  //     id: this.d,
+  //     username: this.form.value.username,
+  //     password: this.form.value.password,
+  //   };
+  //   localStorage.setItem('user', JSON.stringify(this.data));
+  //   console.log(this.data);
+
+  //   {
+  //   }
+  // }
+  ngOnInit() {}
 }

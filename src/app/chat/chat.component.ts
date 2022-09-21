@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { ChatService } from '../chat.service';
-import { Message } from '../Message';
-import { Rooms } from '../Rooms';
+import { ChatService } from '../services/chat.service';
+import { Message } from '../models/Message';
+import { Rooms } from '../models/Rooms';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
+import { AuthService } from '../services/auth.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
@@ -28,7 +30,11 @@ export class ChatComponent implements OnInit {
   cancelEditMsg: boolean = false;
   saveEditMsg: boolean = true;
 
-  constructor(private chatService: ChatService) {}
+  constructor(
+    private chatService: ChatService,
+    public authService: AuthService,
+    private actRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.chatService.getRooms().subscribe((data: Rooms[]) => {
