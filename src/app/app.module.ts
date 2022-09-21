@@ -20,7 +20,7 @@ import { ChatComponent } from './chat/chat.component';
 import { ChatMsgComponent } from './chat/chat-msg/chat-msg.component';
 import { RegisterComponent } from './register/register.component';
 import { httpInterceptorProviders } from './helpers/auth.interceptor';
-import { FjoriComponent } from './fjori/fjori.component';
+import { AppRoutingModule } from './app-routing.modules';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,6 @@ import { FjoriComponent } from './fjori/fjori.component';
     ChatComponent,
     ChatMsgComponent,
     RegisterComponent,
-    FjoriComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,8 +43,7 @@ import { FjoriComponent } from './fjori/fjori.component';
     MatDialogModule,
     MatIconModule,
     MatButtonToggleModule,
-
-    RouterModule.forRoot([]),
+    AppRoutingModule,
     CommonModule,
   ],
 

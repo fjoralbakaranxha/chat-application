@@ -1,12 +1,19 @@
-<div
-    class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm fixed-top">
-    <nav class="my-2 my-md-0 mr-md-3">
-        <a *ngIf="this.authService.isLoggedIn" class="p-2 text-dark">Chat</a>
-        <a *ngIf="!this.authService.isLoggedIn" class="p-2 text-dark" routerLinkActive="active" routerLink="/login">Sign
-            in</a>
-    </nav>
-    <a *ngIf="!this.authService.isLoggedIn" class="btn btn-outline-primary" routerLinkActive="active"
-        routerLink="/register">Sign up</a>
-    <button (click)="logout()" *ngIf="this.authService.isLoggedIn" type="button" class="btn btn-danger">Logout</button>
+<div class="buttons">
+    <div class="btns">
+        <div class="login-button d-inline-block">
+            <button *ngIf="!this.authService.isLoggedIn" class=" btn btn-outline-success" routerLinkActive="active"
+                routerLink="/login">Sign
+                in</button>
+        </div>
+        <div class="register-button d-inline-block">
+            <button *ngIf="!this.authService.isLoggedIn" class="btn btn-outline-primary" routerLinkActive="active"
+                routerLink="/register">Sign up </button>
+        </div>
+    </div>
+    <div class="logout-button">
+        <button (click)="logout()" *ngIf="this.authService.isLoggedIn" type="button"
+            class="btn btn-danger">Logout</button>
+    </div>
 </div>
+
 <router-outlet></router-outlet>

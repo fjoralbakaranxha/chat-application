@@ -18,34 +18,15 @@ export class LoginComponent implements OnInit {
     public router: Router
   ) {
     this.form = this.fb.group({
-      email: [''],
-      password: [''],
+      username: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
 
   onSubmit() {
-    if (!this.form.valid) {
-      return;
+    if (this.form.valid) {
+      this.authService.login(this.form.value);
     }
-
-    this.authService.login(this.form.value);
   }
-
-  // onSubmit() {
-  //   if (!this.form.valid) {
-  //     return;
-  //   }
-  //   this.d = new Date().getTime().toString();
-  //   this.data = {
-  //     id: this.d,
-  //     username: this.form.value.username,
-  //     password: this.form.value.password,
-  //   };
-  //   localStorage.setItem('user', JSON.stringify(this.data));
-  //   console.log(this.data);
-
-  //   {
-  //   }
-  // }
   ngOnInit() {}
 }

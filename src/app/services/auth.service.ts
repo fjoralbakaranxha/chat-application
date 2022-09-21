@@ -31,8 +31,8 @@ export class AuthService {
     return this.http
       .post<any>(AUTH_API + 'signin', user)
       .subscribe((res: any) => {
-        localStorage.setItem('access_token', res.token);
-        console.log(res.token);
+        localStorage.setItem('access_token', res.accessToken);
+        console.log(res.accessToken);
         this.router.navigate(['chats']);
       });
   }
