@@ -60,8 +60,9 @@ export class ChatComponent implements OnInit {
   connect() {
     const socket = new SockJS('http://localhost:8080/chatapp');
     this.stompClient = Stomp.over(socket);
+    const token = localStorage.getItem('access_token') ?? '';
 
-    this.stompClient.connect({}, () => {
+    this.stompClient.connect({ 'X-Authorization': token }, () => {
       this.stompClient.subscribe('/topic/public', (messageSent: any) => {
         const data = JSON.parse(messageSent.body);
         if (data.currentRoomId === this.currentRoomId) {
@@ -96,10 +97,8 @@ export class ChatComponent implements OnInit {
   }
 
   sendMessage() {
-    const user = localStorage.getItem('user') ?? '';
-    const parsedUser = JSON.parse(user);
-    const username = parsedUser.username;
-    const userId = parsedUser.id;
+    const userId = localStorage.getItem('uId') ?? '';
+    const username = this.authService.getUsername();
 
     if (!this.content) {
       alert('Please fill the content');
@@ -116,7 +115,12 @@ export class ChatComponent implements OnInit {
       type
     );
 
-    this.stompClient.send('/app/chat.sendMessage', {}, JSON.stringify(message));
+    const token = localStorage.getItem('access_token') ?? '';
+    this.stompClient.send(
+      '/app/chat.sendMessage',
+      { 'X-Authorization': token },
+      JSON.stringify(message)
+    );
     this.content = '';
     this.imageSelected = null;
   }
@@ -167,10 +171,8 @@ export class ChatComponent implements OnInit {
   }
 
   saveMessage() {
-    const user = localStorage.getItem('user') ?? '';
-    const parsedUser = JSON.parse(user);
-    const username = parsedUser.username;
-    const userId = parsedUser.id;
+    const userId = localStorage.getItem('uId') ?? '';
+    const username = '';
 
     if (!this.content) {
       alert('Please fill the content');

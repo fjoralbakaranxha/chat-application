@@ -24,9 +24,7 @@ export class Message {
   }
 
   isMessageMine() {
-    const user = localStorage.getItem('user') ?? '';
-    const userId = JSON.parse(user).id;
-
+    const userId = localStorage.getItem('uId') ?? '';
     return userId == this.userId;
   }
 

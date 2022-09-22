@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import jwt_decode from 'jwt-decode';
 
 import {
   HttpClient,
@@ -32,6 +33,8 @@ export class AuthService {
       .post<any>(AUTH_API + 'signin', user)
       .subscribe((res: any) => {
         localStorage.setItem('access_token', res.accessToken);
+        localStorage.setItem('uId', res.id);
+
         console.log(res.accessToken);
         this.router.navigate(['chats']);
       });
@@ -47,6 +50,7 @@ export class AuthService {
   }
 
   doLogout() {
+    localStorage.removeItem('uId');
     let removeToken = localStorage.removeItem('access_token');
     if (removeToken == null) {
       this.router.navigate(['login']);
@@ -63,5 +67,11 @@ export class AuthService {
       msg = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
     return throwError(msg);
+  }
+
+  getUsername() {
+    let accessToken = localStorage.getItem('access_token') ?? '';
+    let tokenDecode: any = jwt_decode(accessToken);
+    return tokenDecode.sub ?? '';
   }
 }
