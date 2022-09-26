@@ -5,12 +5,14 @@ import {
   HttpHandler,
   HttpRequest,
   HTTP_INTERCEPTORS,
+  HttpErrorResponse,
 } from '@angular/common/http';
-import { AuthService } from '../services/auth.service';
+import { tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(public router: Router) {}
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     const authToken = localStorage.getItem('access_token');
     console.log(authToken);
@@ -20,7 +22,20 @@ export class AuthInterceptor implements HttpInterceptor {
         Authorization: 'Bearer ' + authToken,
       },
     });
-    return next.handle(req);
+
+    return next.handle(req).pipe(
+      tap(
+        () => {},
+        (err: any) => {
+          if (err instanceof HttpErrorResponse) {
+            if (err.status !== 401) {
+              return;
+            }
+            this.router.navigate(['login']);
+          }
+        }
+      )
+    );
   }
 }
 export const httpInterceptorProviders = [

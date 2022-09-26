@@ -6,7 +6,7 @@ import { Rooms } from '../models/Rooms';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { AuthService } from '../services/auth.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
@@ -33,7 +33,8 @@ export class ChatComponent implements OnInit {
   constructor(
     private chatService: ChatService,
     public authService: AuthService,
-    private actRoute: ActivatedRoute
+    private actRoute: ActivatedRoute,
+    public router: Router
   ) {}
 
   ngOnInit(): void {
